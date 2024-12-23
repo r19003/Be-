@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e4f1ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+            max-height: 100vh;
+            overflow-y: scroll;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #3498db;
+            color: white;
+            font-size: 18px;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            table th, table td {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Employee Data</h1>
+
+        <!-- Table for displaying employee data -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Age</th>
+                    <th>Salary</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody id="employeeData">
+                <!-- Dynamic rows will be injected here -->
+            </tbody>
+        </table>
+
+        <!-- Button to go back to the form -->
+        <a href="index.html" class="btn">Back to Form</a>
+    </div>
+
+    <script>
+        // Fetch employee data from the backend API
+        async function fetchEmployeeData() {
+            try {
+                const response = await fetch('http://localhost:3000/employees'); // Endpoint for fetching employee data
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employee data');
+                }
+                const data = await response.json();
+                loadEmployeeData(data);
+            } catch (error) {
+                console.error("Error fetching employee data:", error);
+            }
+        }
+    
+        // Function to dynamically create rows and inject them into the table
+        function loadEmployeeData(employeeData) {
+            const tableBody = document.getElementById('employeeData');
+    
+            employeeData.forEach(employee => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${employee.id}</td>
+                    <td>${employee.name}</td>
+                    <td>${employee.email}</td>
+                    <td>${employee.age}</td>
+                    <td>${employee.salary}</td>
+                    <td>${employee.phone}</td>
+                    <td>${employee.address}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+    
+        // Load data when the page is ready
+        window.onload = fetchEmployeeData;
+    </script>    
+
+</body>
+</html>
